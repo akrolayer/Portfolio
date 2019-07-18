@@ -4,7 +4,7 @@
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
  <meta name="GENERATOR" content="UTF-8 Writer" />
 <title>タイピングゲーム</title>
-
+<link rel="stylesheet" href="css/text.css">
 <script>
 
 document.onkeydown = typeGame;  //キー押下時に関数typeGame()を呼び出す
@@ -13,29 +13,39 @@ var Alphabet = new Array("Ａ","Ｂ","Ｃ","Ｄ","Ｅ","Ｆ","Ｇ","Ｈ","Ｉ",
                      "Ｊ","Ｋ","Ｌ","Ｍ","Ｎ","Ｏ","Ｐ","Ｑ","Ｒ",
                      "Ｓ","Ｔ","Ｕ","Ｖ","Ｗ","Ｘ","Ｙ","Ｚ",";",",",".");
 
-var kcode = new Array(65,66,67,68,69,70,71,72,73,
+// var kcode=new Array(65,66,67,68,69,70,71,72,73,
+//                       74,75,76,77,78,79,80,81,82,
+//                       83,84,85,86,87,88,89,90,186,188,190);
+var kcode=new Array();
+
+var QWERTY = new Array(65,66,67,68,69,70,71,72,73,
                       74,75,76,77,78,79,80,81,82,
-                      83,84,85,86,87,88,89,90,187,188,190);
+                      83,84,85,86,87,88,89,90,186,188,190);
 
 var eucalyn = new Array(65,78,67,73,68,66,72,77,70,188,75,190,
                         89,186,83,80,81,85,76,74,71,86,87,88,
                         79,90,82,69,84)
 
+var Colemak= new Array(65,66,67,71,75,69,84,72,76,89,78,85,
+                      77,74,186,82,81,83,68,70,73,86,87,88,
+                      79,90,80,188,190)
+
 var rnd = new Array();
 
 var Sentence = "";       //問題の文字列を格納
 var count=0;             //何問目か格納
+var missCount=0;
 var typStart,typEnd;   //開始時と終了時の時刻を格納
-const SentenceLength=26;
+const SentenceLength=128;
 
+var imagelist=new Array("images/QWERTY.jpg","images/Eucalyn.jpg","images/Colemak.jpg");
 //0～25までの乱数を200個作成して配列rndに格納する関数
 function random()
 {
 
   for ( var i = 0 ; i < SentenceLength ; i++ )
   {
-    //rnd[i] = Math.floor( Math.random() * 26 );
-    rnd[i]=i;
+    rnd[i] = Math.floor( Math.random() * 26 );
   }
 }
 
@@ -56,9 +66,32 @@ function SetSentence()
   }
   
   //問題枠に表示する
+  document.getElementById("waku").style.backgroundColor="aliceblue";
   document.getElementById("waku").innerHTML = Sentence;
 }
 
+function changeMap(){
+  target= document.getElementById("name");
+  targetText=document.getElementById("text");
+  targetImg=document.getElementById("image");
+  switch(target.selectedIndex){
+    case 0:
+    kcode=Array.from(QWERTY);
+    targetText.innerText="現在の配列：QWERTY";
+    targetImg.src=imagelist[0];
+    break;
+    case 1:
+    kcode=Array.from(eucalyn);
+    targetText.innerText="現在の配列：eucalyn";
+    targetImg.src=imagelist[1];
+    break;
+    case 2:
+    kcode=Array.from(Colemak);
+    targetText.innerText="現在の配列：Colemak";
+    targetImg.src=imagelist[2];
+    break;
+  }
+}
 
 function typeGame(evt)
 {
@@ -74,7 +107,7 @@ function typeGame(evt)
     kc = evt.which;
   }
   //入力されたキーコードと、問題文のキーコードを比較
-  if (kc == eucalyn[rnd[count] ])
+  if (kc == kcode[rnd[count] ])
   {
     //以下、キーコードが一致した時の処理
 
@@ -85,7 +118,7 @@ function typeGame(evt)
     }
     
     count++; //カウント数を＋１にする
-    
+    document.getElementById("waku").style.backgroundColor="aliceblue";
     //全文字入力したか確認
     if ( count < SentenceLength)
     {
@@ -109,18 +142,27 @@ function typeGame(evt)
       //1000で割った「余り(%で取得できる）」でミリ秒を取得
       var msec = elapsed % 1000;
       
+      var ansper=count/(count+missCount)*100;
+      ansper=Math.round(ansper);
       //問題終了を告げる文字列を作成
-      var fin="GAME終了　時間："+sec+"秒"+msec;
+      var fin="GAME終了　時間："+sec+"秒"+msec+"\n"+"正確度："+count+"/"+(count+missCount)+"="+ansper+"%";
       
       //問題枠にゲーム終了を表示
       document.getElementById("waku").innerHTML = fin;
     }
+  }
+  else{
+    missCount++;
+    document.getElementById("waku").style.backgroundColor="lightcoral";
   }
 }
 </script>
 
 <style type="text/css">
 <!--
+body{
+  background-color: #66CCCC
+}
 div#waku
 {
   border:8px double navy;
@@ -128,22 +170,27 @@ div#waku
   height:300px;
   font-size:18pt;
   overflow:auto;
+  background-color: aliceblue;
 }
 
 -->
 </style>
 
 </head>
-<body onload="SetSentence()" bgcolor="#ffffff" text="#000000" link="#0000ff" alink="#ff0000" vlink="#800080">
+<body onload="SetSentence(); changeMap();" bgcolor="#ffffff" text="#000000" >
 <h1>タイピングゲーム</h1>
 <select name="name" id="name">
   <option value="QWERTY">QWERTY</option>
   <option value="eucalyn">eucalyn</option>
+  <option value="Colemak">Colemak</option>
 </select>
+<input type="button" value="配列切替" onclick="changeMap()" />
+<div id="text"></div>
 <div id="waku"></div>
 <form>
 <input type="button" value="問題初期化" onclick="SetSentence()"><br>
-
+<p>配列図</p>
+<img id="image" src="QWERTY.jpg" width="500" height="200" alt="QWERTY">
 
 </form>
 </body>
