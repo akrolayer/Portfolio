@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC>
+<html lang="ja">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <meta name="GENERATOR" content="UTF-8 Writer" />
+<title>タイピングゲーム</title>
+<link rel="stylesheet" href="css/text.css">
+<script>
+
+document.onkeydown = typeGame;  //キー押下時に関数typeGame()を呼び出す
+document.onkeyup = releaseFunction;
+    
+var hiragana = new Array("あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ",
+                        "た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ",
+                        "ま","み","む","め","も","や","ゆ","よ","わ","ん");
+
+
+var rnd = new Array();
+
+var Sentence = "";       //問題の文字列を格納
+var count=0;             //何問目か格納
+var missCount=0;
+var typStart,typEnd;   //開始時と終了時の時刻を格納
+const SentenceLength=128;
+
+
+var imagelist=new Array("images/QWERTY.jpg","images/Eucalyn.jpg","images/Colemak.jpg");
+//0～25までの乱数をSentenceLength個作成して配列rndに格納する関数
+function random()
+{
+    for ( var i = 0 ; i < SentenceLength ; i++ )
+    {
+        rnd[i] = Math.floor( Math.random() * 40 );
+    }
+}
+
+function reaction(keyStatus){
+    if(keyStatus[86]&&keyStatus[77]){//エンターキー送信
+        let KEvent = new KeyboardEvent( "keydown", { keyCode: 13 });
+        let K2Event = new KeyboardEvent( "keyup", { keyCode: 13 });
+        document.dispatchEvent( KEvent );
+        document.dispatchEvent( K2Event );
+    }
+    
+    if(keyStatus[32]){//シフト同時押し
+        if(keyStatus[70]){//シフトと左手濁音キー(f)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "み";//w
+            if(keyStatus[69]) return "り";//e
+            if(keyStatus[82]) return "め";//r
+            if(keyStatus[85]) return "ざ";//u
+            if(keyStatus[73]) return "よ";//i
+            if(keyStatus[79]) return "ゆ";//o
+            if(keyStatus[80]) return "え";//p
+            if(keyStatus[65]) return "せ";//a
+            if(keyStatus[83]) return "ね";//s
+            if(keyStatus[68]) return "に";//d
+            if(keyStatus[70]) return "ま";//f
+            if(keyStatus[71]) return "ち";//g
+            if(keyStatus[72]) return "わ";//h
+            if(keyStatus[74]) return "の";//j
+            if(keyStatus[75]) return "も";//k
+            if(keyStatus[76]) return "づ";//l
+            if(keyStatus[187]) return "や";//;
+            if(keyStatus[90]) return "ほ";//z
+            if(keyStatus[88]) return "ひ";//x
+            if(keyStatus[67]) return "を";//c
+            if(keyStatus[86]) return "、";//v
+            if(keyStatus[66]) return "ぬ";//b
+            if(keyStatus[78]) return "お";//n
+            if(keyStatus[77]) return "。";//m
+            if(keyStatus[188]) return "む";//,
+            if(keyStatus[190]) return "ぶ";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[74]){//シフトと右手濁音キー(j)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "み";//w
+            if(keyStatus[69]) return "り";//e
+            if(keyStatus[82]) return "め";//r
+            if(keyStatus[85]) return "さ";//u
+            if(keyStatus[73]) return "よ";//i
+            if(keyStatus[79]) return "ゆ";//o
+            if(keyStatus[80]) return "え";//p
+            if(keyStatus[65]) return "ぜ";//a
+            if(keyStatus[83]) return "ね";//s
+            if(keyStatus[68]) return "に";//d
+            if(keyStatus[70]) return "ま";//f
+            if(keyStatus[71]) return "ぢ";//g
+            if(keyStatus[72]) return "わ";//h
+            if(keyStatus[74]) return "の";//j
+            if(keyStatus[75]) return "も";//k
+            if(keyStatus[76]) return "つ";//l
+            if(keyStatus[187]) return "や";//;
+            if(keyStatus[90]) return "ぼ";//z
+            if(keyStatus[88]) return "び";//x
+            if(keyStatus[67]) return "を";//c
+            if(keyStatus[86]) return "、";//v
+            if(keyStatus[66]) return "ぬ";//b
+            if(keyStatus[78]) return "お";//n
+            if(keyStatus[77]) return "。";//m
+            if(keyStatus[188]) return "む";//,
+            if(keyStatus[190]) return "ふ";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[86]){//シフトと左手半濁音キー(v)押し//右手は存在しない
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "み";//w
+            if(keyStatus[69]) return "り";//e
+            if(keyStatus[82]) return "め";//r
+            if(keyStatus[85]) return "さ";//u
+            if(keyStatus[73]) return "よ";//i
+            if(keyStatus[79]) return "ゆ";//o
+            if(keyStatus[80]) return "え";//p
+            if(keyStatus[65]) return "せ";//a
+            if(keyStatus[83]) return "ね";//s
+            if(keyStatus[68]) return "に";//d
+            if(keyStatus[70]) return "ま";//f
+            if(keyStatus[71]) return "ち";//g
+            if(keyStatus[72]) return "わ";//h
+            if(keyStatus[74]) return "の";//j
+            if(keyStatus[75]) return "も";//k
+            if(keyStatus[76]) return "つ";//l
+            if(keyStatus[187]) return "や";//;
+            if(keyStatus[90]) return "ほ";//z
+            if(keyStatus[88]) return "ひ";//x
+            if(keyStatus[67]) return "を";//c
+            if(keyStatus[86]) return "、";//v
+            if(keyStatus[66]) return "ぬ";//b
+            if(keyStatus[78]) return "お";//n
+            if(keyStatus[77]) return "。";//m
+            if(keyStatus[188]) return "む";//,
+            if(keyStatus[190]) return "ぷ";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[81]) return "ヴ";//q
+        if(keyStatus[87]) return "み";//w
+        if(keyStatus[69]) return "り";//e
+        if(keyStatus[82]) return "め";//r
+        if(keyStatus[85]) return "さ";//u
+        if(keyStatus[73]) return "よ";//i
+        if(keyStatus[79]) return "ゆ";//o
+        if(keyStatus[80]) return "え";//p
+        if(keyStatus[65]) return "せ";//a
+        if(keyStatus[83]) return "ね";//s
+        if(keyStatus[68]) return "に";//d
+        if(keyStatus[70]) return "ま";//f
+        if(keyStatus[71]) return "ち";//g
+        if(keyStatus[72]) return "わ";//h
+        if(keyStatus[74]) return "の";//j
+        if(keyStatus[75]) return "も";//k
+        if(keyStatus[76]) return "つ";//l
+        if(keyStatus[187]) return "や";//;
+        if(keyStatus[90]) return "ほ";//z
+        if(keyStatus[88]) return "ひ";//x
+        if(keyStatus[67]) return "を";//c
+        if(keyStatus[86]) return "、";//v
+        if(keyStatus[66]) return "ぬ";//b
+        if(keyStatus[78]) return "お";//n
+        if(keyStatus[77]) return "。";//m
+        if(keyStatus[188]) return "む";//,
+        if(keyStatus[190]) return "ふ";//.
+        if(keyStatus[191]) return "れ";///
+    }
+    else{//シフトなし
+        if(keyStatus[70]){//シフトと左手濁音キー(f)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "は";//w
+            if(keyStatus[69]) return "て";//e
+            if(keyStatus[82]) return "し";//r
+            if(keyStatus[73]) return "る";//i
+            if(keyStatus[79]) return "す";//o
+            if(keyStatus[80]) return "べ";//p
+            if(keyStatus[65]) return "ろ";//a
+            if(keyStatus[83]) return "き";//s
+            if(keyStatus[68]) return "と";//d
+            if(keyStatus[70]) return "か";//f
+            if(keyStatus[71]) return "っ";//g
+            if(keyStatus[72]) return "ぐ";//h
+            if(keyStatus[74]) return "あ";//j
+            if(keyStatus[75]) return "い";//k
+            if(keyStatus[76]) return "う";//l
+            if(keyStatus[187]) return "ー";//;
+            if(keyStatus[90]) return "ほ";//z
+            if(keyStatus[88]) return "ひ";//x
+            if(keyStatus[67]) return "け";//c
+            if(keyStatus[86]) return "こ";//v
+            if(keyStatus[66]) return "そ";//b
+            if(keyStatus[78]) return "だ";//n
+            if(keyStatus[77]) return "な";//m
+            if(keyStatus[188]) return "ん";//,
+            if(keyStatus[190]) return "ら";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[74]){//シフトと右手濁音キー(j)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "ば";//w
+            if(keyStatus[69]) return "で";//e
+            if(keyStatus[82]) return "じ";//r
+            if(keyStatus[73]) return "る";//i
+            if(keyStatus[79]) return "す";//o
+            if(keyStatus[80]) return "へ";//p
+            if(keyStatus[65]) return "ろ";//a
+            if(keyStatus[83]) return "ぎ";//s
+            if(keyStatus[68]) return "ど";//d
+            if(keyStatus[70]) return "が";//f
+            if(keyStatus[71]) return "っ";//g
+            if(keyStatus[72]) return "く";//h
+            if(keyStatus[74]) return "あ";//j
+            if(keyStatus[75]) return "い";//k
+            if(keyStatus[76]) return "う";//l
+            if(keyStatus[187]) return "ー";//;
+            if(keyStatus[90]) return "ぼ";//z
+            if(keyStatus[88]) return "び";//x
+            if(keyStatus[67]) return "げ";//c
+            if(keyStatus[86]) return "ご";//v
+            if(keyStatus[66]) return "ぞ";//b
+            if(keyStatus[78]) return "た";//n
+            if(keyStatus[77]) return "な";//m
+            if(keyStatus[188]) return "ん";//,
+            if(keyStatus[190]) return "ら";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[86]){//シフトと左手半濁音キー(v)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "は";//w
+            if(keyStatus[69]) return "て";//e
+            if(keyStatus[82]) return "し";//r
+            if(keyStatus[73]) return "る";//i
+            if(keyStatus[79]) return "す";//o
+            if(keyStatus[80]) return "ぺ";//p
+            if(keyStatus[65]) return "ろ";//a
+            if(keyStatus[83]) return "き";//s
+            if(keyStatus[68]) return "と";//d
+            if(keyStatus[70]) return "か";//f
+            if(keyStatus[71]) return "っ";//g
+            if(keyStatus[72]) return "く";//h
+            if(keyStatus[74]) return "あ";//j
+            if(keyStatus[75]) return "い";//k
+            if(keyStatus[76]) return "う";//l
+            if(keyStatus[187]) return "ー";//;
+            if(keyStatus[90]) return "ほ";//z
+            if(keyStatus[88]) return "ひ";//x
+            if(keyStatus[67]) return "け";//c
+            if(keyStatus[86]) return "こ";//v
+            if(keyStatus[66]) return "そ";//b
+            if(keyStatus[78]) return "た";//n
+            if(keyStatus[77]) return "な";//m
+            if(keyStatus[188]) return "ん";//,
+            if(keyStatus[190]) return "ら";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[77]){//シフトと右手半濁音キー(m)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) return "ぱ";//w
+            if(keyStatus[69]) return "て";//e
+            if(keyStatus[82]) return "し";//r
+            if(keyStatus[73]) return "る";//i
+            if(keyStatus[79]) return "す";//o
+            if(keyStatus[80]) return "へ";//p
+            if(keyStatus[65]) return "ろ";//a
+            if(keyStatus[83]) return "き";//s
+            if(keyStatus[68]) return "と";//d
+            if(keyStatus[70]) return "か";//f
+            if(keyStatus[71]) return "っ";//g
+            if(keyStatus[72]) return "く";//h
+            if(keyStatus[74]) return "あ";//j
+            if(keyStatus[75]) return "い";//k
+            if(keyStatus[76]) return "う";//l
+            if(keyStatus[187]) return "ー";//;
+            if(keyStatus[90]) return "ぽ";//z
+            if(keyStatus[88]) return "ぴ";//x
+            if(keyStatus[67]) return "け";//c
+            if(keyStatus[86]) return "こ";//v
+            if(keyStatus[66]) return "そ";//b
+            if(keyStatus[78]) return "た";//n
+            if(keyStatus[77]) return "な";//m
+            if(keyStatus[188]) return "ん";//,
+            if(keyStatus[190]) return "ら";//.
+            if(keyStatus[191]) return "れ";///
+        }
+        if(keyStatus[81]) return "ヴ";//q
+        if(keyStatus[87]) return "は";//w
+        if(keyStatus[69]) return "て";//e
+        if(keyStatus[82]) return "し";//r
+        if(keyStatus[73]) return "る";//i
+        if(keyStatus[79]) return "す";//o
+        if(keyStatus[80]) return "へ";//p
+        if(keyStatus[65]) return "ろ";//a
+        if(keyStatus[83]) return "き";//s
+        if(keyStatus[68]) return "と";//d
+        if(keyStatus[70]) return "か";//f
+        if(keyStatus[71]) return "っ";//g
+        if(keyStatus[72]) return "く";//h
+        if(keyStatus[74]) return "あ";//j
+        if(keyStatus[75]) return "い";//k
+        if(keyStatus[76]) return "う";//l
+        if(keyStatus[187]) return "ー";//;
+        if(keyStatus[90]) return "ほ";//z
+        if(keyStatus[88]) return "ひ";//x
+        if(keyStatus[67]) return "け";//c
+        if(keyStatus[86]) return "こ";//v
+        if(keyStatus[66]) return "そ";//b
+        if(keyStatus[78]) return "た";//n
+        if(keyStatus[77]) return "な";//m
+        if(keyStatus[188]) return "ん";//,
+        if(keyStatus[190]) return "ら";//.
+        if(keyStatus[191]) return "れ";///
+    }
+}
+//タイピングゲームの問題をセットする関数
+function SetSentence()
+{
+    //問題文とカウント数をクリアする
+    Sentence="";
+    count=0;
+    
+    //乱数作成関数の呼び出し
+    random();
+    
+    //問題文の作成
+    for ( var i = 0 ; i < SentenceLength ; i++)
+    {
+        Sentence += hiragana[ rnd[i] ];
+    }
+    
+    //問題枠に表示する
+    document.getElementById("waku").style.backgroundColor="aliceblue";
+    document.getElementById("waku").innerHTML = Sentence;
+}
+
+function typeGame(e)
+{
+        var keyStatus={};
+    //入力されたキーのキーコードを取得
+    if (document.all)
+    {
+        keyStatus[e.keyCode]==true;
+    }
+
+}
+function releaseFunction(e){
+    keyStatus[e.keyCode]=false;
+}
+</script>
+
+<style type="text/css">
+<!--
+body{
+    background-color: #66CCCC
+}
+div#waku
+{
+    border:8px double navy;
+    width:400px;
+    height:300px;
+    font-size:18pt;
+    overflow:auto;
+    background-color: aliceblue;
+}
+
+-->
+</style>
+
+</head>
+<body onload="SetSentence(); changeMap();" bgcolor="#ffffff" text="#000000" >
+<h1>タイピングゲーム</h1>
+<select name="name" id="name">
+    <option value="QWERTY">QWERTY</option>
+    <option value="eucalyn">eucalyn</option>
+    <option value="Colemak">Colemak</option>
+</select>
+<input type="button" value="配列切替" onclick="changeMap()" />
+<div id="text"></div>
+<div id="waku"></div>
+<form>
+<input type="button" value="問題初期化" onclick="SetSentence()"><br>
+<p>配列図</p>
+<img id="image" src="QWERTY.jpg" width="500" height="200" alt="QWERTY">
+
+</form>
+</body>
+</html>
+
