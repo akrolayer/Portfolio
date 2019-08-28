@@ -76,24 +76,49 @@ function reaction(keyStatus){
         if(keyStatus[74]){//シフトと右手濁音キー(j)押し
             if(keyStatus[81]) return "ヴ";//q
             if(keyStatus[87]) return "み";//w
-            if(keyStatus[69]) return "り";//e
-            if(keyStatus[82]) return "め";//r
+            if(keyStatus[69]) {
+                if(keyStatus[79]) return "でゅ";
+                return "り";//e
+            }
+            if(keyStatus[82]) {
+                if(keyStatus[187]) return "じゃ";
+                if(keyStatus[79]) return "じゅ";
+                if(keyStatus[80]) return "じぇ";//p
+                if(keyStatus[73]) return "じょ";
+                return "め";//r
+            }
             if(keyStatus[85]) return "さ";//u
             if(keyStatus[73]) return "よ";//i
             if(keyStatus[79]) return "ゆ";//o
             if(keyStatus[80]) return "え";//p
             if(keyStatus[65]) return "ぜ";//a
-            if(keyStatus[83]) return "ね";//s
+            if(keyStatus[83]) {
+                if(keyStatus[187]) return "ぎゃ";
+                if(keyStatus[79]) return "ぎゅ";
+                if(keyStatus[73]) return "ぎょ";
+                return "ね";//s
+            }
             if(keyStatus[68]) return "に";//d
             if(keyStatus[70]) return "ま";//f
-            if(keyStatus[71]) return "ぢ";//g
+            if(keyStatus[71]) {
+                if(keyStatus[187]) return "ぢゃ";
+                if(keyStatus[79]) return "ぢゅ";
+                if(keyStatus[73]) return "ぢょ";
+                if(keyStatus[80]) return "ぢぇ";//p
+                return "ぢ";//g
+            }
             if(keyStatus[72]) return "わ";//h
             if(keyStatus[74]) return "の";//j
             if(keyStatus[75]) return "も";//k
             if(keyStatus[76]) return "つ";//l
             if(keyStatus[187]) return "や";//;
             if(keyStatus[90]) return "ぼ";//z
-            if(keyStatus[88]) return "び";//x
+            if(keyStatus[88]) {
+                if(keyStatus[187]) return "びゃ";
+                if(keyStatus[79]) return "びゅ";
+                if(keyStatus[73]) return "びょ";
+                return "び";//x
+            }
             if(keyStatus[67]) return "を";//c
             if(keyStatus[86]) return "、";//v
             if(keyStatus[66]) return "ぬ";//b
@@ -133,33 +158,92 @@ function reaction(keyStatus){
             if(keyStatus[190]) return "ぷ";//.
             if(keyStatus[191]) return "れ";///
         }
-        if(keyStatus[81]) return "ヴ";//q
-        if(keyStatus[87]) return "み";//w
-        if(keyStatus[69]) return "り";//e
-        if(keyStatus[82]) return "め";//r
+        //清音
+        if(keyStatus[81]) {
+            if(keyStatus[80]) return "ヴぇ";
+            if(keyStatus[78]) return "ヴぉ";
+            if(keyStatus[79]) return "ヴゅ";
+            return "ヴ";//q
+        }
+        if(keyStatus[87]) {
+            if(keyStatus[187]) return "みゃ";
+            if(keyStatus[79]) return "みゅ";
+            if(keyStatus[73]) return "みょ";
+            return "み";//w
+        }
+        if(keyStatus[69]) {
+            if(keyStatus[187]) return "りゃ";
+            if(keyStatus[79]) return "りゅ";
+            if(keyStatus[73]) return "りょ";
+            return "り";//e
+        }
+        if(keyStatus[82]) {
+            if(keyStatus[187]) return "しゃ";
+            if(keyStatus[80]) return "しぇ";
+            if(keyStatus[79]) return "しゅ";
+            if(keyStatus[73]) return "しょ";
+            return "め";//r
+        }
         if(keyStatus[85]) return "さ";//u
         if(keyStatus[73]) return "よ";//i
         if(keyStatus[79]) return "ゆ";//o
-        if(keyStatus[80]) return "え";//p
+
         if(keyStatus[65]) return "せ";//a
-        if(keyStatus[83]) return "ね";//s
-        if(keyStatus[68]) return "に";//d
+        if(keyStatus[83]) {
+            if(keyStatus[187]) return "きゃ";
+            if(keyStatus[79]) return "きゅ";
+            if(keyStatus[73]) return "きょ";
+            return "ね";//s
+        }
+        if(keyStatus[68]) {
+            if(keyStatus[187]) return "にゃ";
+            if(keyStatus[79]) return "にゅ";
+            if(keyStatus[73]) return "にょ";
+            return "に";//d
+        }
         if(keyStatus[70]) return "ま";//f
-        if(keyStatus[71]) return "ち";//g
+        if(keyStatus[71]) {
+            if(keyStatus[187]) return "ちゃ";
+            if(keyStatus[79]) return "ちゅ";
+            if(keyStatus[80]) return "ちぇ"
+            if(keyStatus[73]) return "ちょ";
+            return "ち";//g
+        }
         if(keyStatus[72]) return "わ";//h
-        if(keyStatus[74]) return "の";//j
+        if(keyStatus[74]) {
+            if(keyStatus[76]) return "つぁ";
+            if(keyStatus[75]) return "つぃ";
+            return "の";//j
+        }
         if(keyStatus[75]) return "も";//k
-        if(keyStatus[76]) return "つ";//l
+        if(keyStatus[76]) {
+            if(keyStatus[80]) return "つぇ";
+            if(keyStatus[78]) return "つぉ";
+            return "つ";//l
+        }
         if(keyStatus[187]) return "や";//;
         if(keyStatus[90]) return "ほ";//z
-        if(keyStatus[88]) return "ひ";//x
+        if(keyStatus[88]) {
+            if(keyStatus[187]) return "ひゃ";
+            if(keyStatus[79]) return "ひゅ";
+            if(keyStatus[73]) return "ひょ";
+            return "ひ";//x
+        }
+        if(keyStatus[80]) return "え";//p
         if(keyStatus[67]) return "を";//c
         if(keyStatus[86]) return "、";//v
         if(keyStatus[66]) return "ぬ";//b
         if(keyStatus[78]) return "お";//n
         if(keyStatus[77]) return "。";//m
         if(keyStatus[188]) return "む";//,
-        if(keyStatus[190]) return "ふ";//.
+        if(keyStatus[190]) {
+            if(keyStatus[74]) return "ふぁ";
+            if(keyStatus[75]) return "ふぃ";
+            if(keyStatus[80]) return "ふぇ";
+            if(keyStatus[78]) return "ふぉ";
+            if(keyStatus[79]) return "ふゅ";
+            return "ふ";//.
+        }
         if(keyStatus[191]) return "れ";///
     }
     else{//シフトなし
@@ -195,14 +279,20 @@ function reaction(keyStatus){
         if(keyStatus[74]){//シフトと右手濁音キー(j)押し
             if(keyStatus[81]) return "ヴ";//q
             if(keyStatus[87]) return "ば";//w
-            if(keyStatus[69]) return "で";//e
+            if(keyStatus[69]) {
+                if(keyStatus[75]) return "でぃ";
+                return "で";//e
+            }
             if(keyStatus[82]) return "じ";//r
             if(keyStatus[73]) return "る";//i
             if(keyStatus[79]) return "す";//o
             if(keyStatus[80]) return "へ";//p
             if(keyStatus[65]) return "ろ";//a
             if(keyStatus[83]) return "ぎ";//s
-            if(keyStatus[68]) return "ど";//d
+            if(keyStatus[68]) {
+                if(keyStatus[76]) return "どぅ";
+                return "ど";//d
+            }
             if(keyStatus[70]) return "が";//f
             if(keyStatus[71]) return "っ";//g
             if(keyStatus[72]) return "く";//h
@@ -279,16 +369,26 @@ function reaction(keyStatus){
             if(keyStatus[190]) return "ら";//.
             if(keyStatus[191]) return "れ";///
         }
-        if(keyStatus[81]) return "ヴ";//q
+        if(keyStatus[81]) {
+            if(keyStatus[74]) return "ヴぁ";
+            if(keyStatus[75]) return "ヴぃ"
+            return "ヴ";//q
+        }
         if(keyStatus[87]) return "は";//w
-        if(keyStatus[69]) return "て";//e
+        if(keyStatus[69]) {
+            if(keyStatus[75]) return "てぃ";
+            return "て";//e
+        }
         if(keyStatus[82]) return "し";//r
         if(keyStatus[73]) return "る";//i
         if(keyStatus[79]) return "す";//o
         if(keyStatus[80]) return "へ";//p
         if(keyStatus[65]) return "ろ";//a
         if(keyStatus[83]) return "き";//s
-        if(keyStatus[68]) return "と";//d
+        if(keyStatus[68]) {
+            if(keyStatus[76]) return "とぅ"
+            return "と";//d
+        }
         if(keyStatus[70]) return "か";//f
         if(keyStatus[71]) return "っ";//g
         if(keyStatus[72]) return "く";//h
