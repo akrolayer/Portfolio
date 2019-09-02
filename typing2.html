@@ -3,13 +3,14 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
  <meta name="GENERATOR" content="UTF-8 Writer" />
-<title>タイピングゲーム</title>
+<title>薙刀式タイピングゲーム</title>
 <link rel="stylesheet" href="css/text.css">
+
 <script>
 
 document.onkeydown = typeGame;  //キー押下時に関数typeGame()を呼び出す
 document.onkeyup = releaseFunction;
-    
+
 var hiragana = new Array("あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ",
                         "た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ",
                         "ま","み","む","め","も","や","ゆ","よ","わ","ん");
@@ -22,9 +23,9 @@ var count=0;             //何問目か格納
 var missCount=0;
 var typStart,typEnd;   //開始時と終了時の時刻を格納
 const SentenceLength=128;
+var a="";
+var keyStatus= new Array();
 
-
-var imagelist=new Array("images/QWERTY.jpg","images/Eucalyn.jpg","images/Colemak.jpg");
 //0～25までの乱数をSentenceLength個作成して配列rndに格納する関数
 function random()
 {
@@ -423,7 +424,6 @@ function SetSentence()
     {
         Sentence += hiragana[ rnd[i] ];
     }
-    
     //問題枠に表示する
     document.getElementById("waku").style.backgroundColor="aliceblue";
     document.getElementById("waku").innerHTML = Sentence;
@@ -431,17 +431,64 @@ function SetSentence()
 
 function typeGame(e)
 {
-        var keyStatus={};
-    //入力されたキーのキーコードを取得
-    if (document.all)
-    {
-        keyStatus[e.keyCode]==true;
-    }
+    //入力されたキーのキーコードを取得   
+    keyStatus[e.keyCode]=true;
 
+    a = reaction(keyStatus);
+    return false;
 }
 function releaseFunction(e){
     keyStatus[e.keyCode]=false;
+    if (a == hiragana[rnd[count]]){
+        if (count==0)
+        { 
+            typStart = new Date();
+        }
+        count++;
+        if ( count < SentenceLength)
+        {
+        //問題文の頭の一文字を切り取る
+        Sentence = Sentence.substring(1,Sentence.Length);
+
+        //問題枠に表示する
+        document.getElementById("waku").innerHTML = Sentence;
+        }    
+        else
+        {
+        //全文字入力していたら、終了時間を記録する
+        typEnd = new Date();
+        
+        //終了時間－開始時間で掛かったミリ秒を取得する
+        var elapsed = typEnd - typStart;
+        
+        //1000で割って「切捨て」、秒数を取得
+        var sec = Math.floor( elapsed/1000 );
+        
+        //1000で割った「余り(%で取得できる）」でミリ秒を取得
+        var msec = elapsed % 1000;
+        
+        var ansper=count/(count+missCount)*100;
+        ansper=Math.round(ansper);
+        //問題終了を告げる文字列を作成
+        var fin="GAME終了　時間："+sec+"秒"+msec+"\n"+"正確度："+count+"/"+(count+missCount)+"="+ansper+"%";
+        
+        //問題枠にゲーム終了を表示
+        document.getElementById("waku").innerHTML = fin;
+        }
+    }
+    else{
+        if(keyStatus[32]!=false){
+            missCount++;
+            document.getElementById("waku").style.backgroundColor="lightcoral";
+        }
+    }       
+    return false;
+
 }
+function checkKey(){
+    
+}
+setTimeout(function(){checkKey()}, 300)
 </script>
 
 <style type="text/css">
@@ -463,20 +510,15 @@ div#waku
 </style>
 
 </head>
-<body onload="SetSentence(); changeMap();" bgcolor="#ffffff" text="#000000" >
+<body onload="SetSentence();" bgcolor="#ffffff" text="#000000" >
 <h1>タイピングゲーム</h1>
-<select name="name" id="name">
-    <option value="QWERTY">QWERTY</option>
-    <option value="eucalyn">eucalyn</option>
-    <option value="Colemak">Colemak</option>
-</select>
-<input type="button" value="配列切替" onclick="changeMap()" />
+
+<input type="text" name="name" size="30" maxlength="20">
 <div id="text"></div>
 <div id="waku"></div>
 <form>
 <input type="button" value="問題初期化" onclick="SetSentence()"><br>
 <p>配列図</p>
-<img id="image" src="QWERTY.jpg" width="500" height="200" alt="QWERTY">
 
 </form>
 </body>
