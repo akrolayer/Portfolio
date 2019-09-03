@@ -36,12 +36,6 @@ function random()
 }
 
 function reaction(keyStatus){
-    if(keyStatus[86]&&keyStatus[77]){//エンターキー送信
-        let KEvent = new KeyboardEvent( "keydown", { keyCode: 13 });
-        let K2Event = new KeyboardEvent( "keyup", { keyCode: 13 });
-        document.dispatchEvent( KEvent );
-        document.dispatchEvent( K2Event );
-    }
     
     if(keyStatus[32]){//シフト同時押し
         if(keyStatus[70]){//シフトと左手濁音キー(f)押し
@@ -418,12 +412,12 @@ function SetSentence()
     
     //乱数作成関数の呼び出し
     random();
-    
+    Sentence="あるないするかがてでずがあるであるがないでないですあるですないですずるい";
     //問題文の作成
-    for ( var i = 0 ; i < SentenceLength ; i++)
-    {
-        Sentence += hiragana[ rnd[i] ];
-    }
+    // for ( var i = 0 ; i < SentenceLength ; i++)
+    // {
+    //     Sentence += hiragana[ rnd[i] ];
+    // }
     //問題枠に表示する
     document.getElementById("waku").style.backgroundColor="aliceblue";
     document.getElementById("waku").innerHTML = Sentence;
@@ -439,7 +433,10 @@ function typeGame(e)
 }
 function releaseFunction(e){
     keyStatus[e.keyCode]=false;
-    if (a == hiragana[rnd[count]]){
+    //if (a == hiragana[rnd[count]]){
+
+    var SentenceArray=Sentence.split("");
+    if(a==SentenceArray[0]){
         if (count==0)
         { 
             typStart = new Date();
@@ -470,15 +467,15 @@ function releaseFunction(e){
         var ansper=count/(count+missCount)*100;
         ansper=Math.round(ansper);
         //問題終了を告げる文字列を作成
-        var fin="GAME終了　時間："+sec+"秒"+msec+"\n"+"正確度："+count+"/"+(count+missCount)+"="+ansper+"%";
+        var fin="GAME終了　時間："+sec+"秒"+msec+"\n";//+"正確度："+count+"/"+(count+missCount)+"="+ansper+"%";
         
         //問題枠にゲーム終了を表示
         document.getElementById("waku").innerHTML = fin;
         }
     }
     else{
-        if(keyStatus[32]!=false){
-            missCount++;
+        if(keyStatus[32]!=true){
+            //missCount++;
             document.getElementById("waku").style.backgroundColor="lightcoral";
         }
     }       
