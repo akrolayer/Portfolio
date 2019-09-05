@@ -412,7 +412,7 @@ function SetSentence()
     
     //乱数作成関数の呼び出し
     random();
-    Sentence="あるないするかがてでずがあるであるがないでないですあるですないですずるい";
+    Sentence="ある ない する か が て で ず が ある である がない でない です あるです ないです ずるい";
     //問題文の作成
     // for ( var i = 0 ; i < SentenceLength ; i++)
     // {
@@ -436,7 +436,7 @@ function releaseFunction(e){
     //if (a == hiragana[rnd[count]]){
 
     var SentenceArray=Sentence.split("");
-    if(a==SentenceArray[0]){
+    if(a==Sentence.charAt(0)){
         if (count==0)
         { 
             typStart = new Date();
@@ -445,7 +445,11 @@ function releaseFunction(e){
         if ( count < SentenceLength)
         {
         //問題文の頭の一文字を切り取る
-        Sentence = Sentence.substring(1,Sentence.Length);
+        Sentence = Sentence.slice(1);
+        
+        if(Sentence.charAt(0)==" "){
+            Sentence = Sentence.slice(1);
+        }
 
         //問題枠に表示する
         document.getElementById("waku").innerHTML = Sentence;
