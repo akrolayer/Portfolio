@@ -8,7 +8,7 @@
 
 <script>
 
-document.onkeydown = typeGame;  //キー押下時に関数typeGame()を呼び出す
+document.onkeydown = keydownFunction;  //キー押下時に関数keydownFunction()を呼び出す
 document.onkeyup = releaseFunction;
 
 var hiragana = new Array("あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ",
@@ -23,7 +23,7 @@ var count=0;             //何問目か格納
 var missCount=0;
 var typStart,typEnd;   //開始時と終了時の時刻を格納
 const SentenceLength=128;
-var a="";
+var typeLetter="";
 var keyStatus= new Array();
 
 //0～25までの乱数をSentenceLength個作成して配列rndに格納する関数
@@ -412,7 +412,7 @@ function SetSentence()
     
     //乱数作成関数の呼び出し
     random();
-    Sentence="ある　ない　する　いない　あい　いる　なる　あな　いす　すいすい　なあ　なあなあ　なす　あるあるある　ないないない　するするする";
+    Sentence1="ある　ない　する　いない　あい　いる　なる　あな　いす　すいすい　なあ　なあなあ　なす　あるあるある　ないないない　するするする";
     Sentence2="か　が　て　で　ず　が　ある　である　がない　でない　です　あるです　ないです　ずるい するでない　すかすか　すてる　かす　かずかず　ずるずる　かてる　かてない　でる　でない";
     Sentence3="こ　と　し　ご　ど　じ　た　だ　う　ん　こと　して　してる　している　してある　してない　していない　すること　した　したこと　したことがある　したことがない　することがない　することがある　いう　うん　いうんだ　なんだ　なんだい　こういうこと　こういうことがある　こういうことがない　こうである　こうでない　しかない　しがない　こんなことがある　こんなことがない　こうだ　してた　うんだ　するんだ　しんだ　とんだ　したがう　したがうんだ　かかない　かかないことがある　どうする　どうだ　だんだん";
     Sentence4="ま　に　まに　も　の　もの　まにあう　ます　まにあいます　ますます　まずまず　まずない　まずい　うまい　ここにある　ここにない　れ　これ　それ　どれ　あれ　お　も　の　おもう　もう　もの　のだ　なのだ　そうなのだ　まもの　にもの　おおもの　ものがある　それがどうした　あれがこうなのだ　そうだとおもう　だがそうでない　それにこうだ　どれにする　なにもない　これにそれもない　ああいうがそうだなとおもう　そのことがこうなるなんて　あのことがそうなるなんて　などなど　になる　おとこ　おんな";
@@ -426,25 +426,25 @@ function SetSentence()
     // {
     //     Sentence += hiragana[ rnd[i] ];
     // }
+    Sentence = Sentence7;
     //問題枠に表示する
     document.getElementById("waku").style.backgroundColor="aliceblue";
     document.getElementById("waku").innerHTML = Sentence;
 }
 
-function typeGame(e)
+function keydownFunction(e)
 {
     //入力されたキーのキーコードを取得   
     keyStatus[e.keyCode]=true;
 
-    a = reaction(keyStatus);
+    typeLetter = reaction(keyStatus);
     return false;
 }
 function releaseFunction(e){
-    keyStatus[e.keyCode]=false;
-    //if (a == hiragana[rnd[count]]){
+    //if (typeLetter == hiragana[rnd[count]]){
 
-    var SentenceArray=Sentence.split("");
-    if(a==Sentence.charAt(0)){
+    var SentenceArray=Sentence.substring(0,2);
+    if(typeLetter==Sentence.charAt(0)||typeLetter==Sentence.slice(0,2)){
         if (count==0)
         { 
             typStart = new Date();
@@ -453,15 +453,20 @@ function releaseFunction(e){
         document.getElementById("waku").style.backgroundColor="aliceblue";
         if ( count < SentenceLength)
         {
-        //問題文の頭の一文字を切り取る
-        Sentence = Sentence.slice(1);
-        
-        if(Sentence.charAt(0)=="　"){
-            Sentence = Sentence.slice(1);
-        }
+            //問題文の頭の一文字を切り取る
+            if(typeLetter==Sentence.slice(0,2)){
+                Sentence = Sentence.slice(2);
+            }
+            else{
+                Sentence = Sentence.slice(1);
+            }
+            
+            if(Sentence.charAt(0)=="　"){
+                Sentence = Sentence.slice(1);
+            }
 
-        //問題枠に表示する
-        document.getElementById("waku").innerHTML = Sentence;
+            //問題枠に表示する
+            document.getElementById("waku").innerHTML = Sentence;
         }    
         else
         {
@@ -489,35 +494,17 @@ function releaseFunction(e){
     else{
         if(keyStatus[32]!=true){
             //missCount++;
-            document.getElementById("waku").style.backgroundColor="lightcoral";
         }
-    }       
+        document.getElementById("waku").style.backgroundColor="lightcoral";
+    } 
+    keyStatus.map(function(value, index, array){
+        return array[index]=false;
+    });      
     return false;
+}
 
-}
-function checkKey(){
-    
-}
-setTimeout(function(){checkKey()}, 300)
 </script>
 
-<style type="text/css">
-<!--
-body{
-    background-color: #66CCCC
-}
-div#waku
-{
-    border:8px double navy;
-    width:400px;
-    height:300px;
-    font-size:18pt;
-    overflow:auto;
-    background-color: aliceblue;
-}
-
-
--->
 </style>
 
 </head>
