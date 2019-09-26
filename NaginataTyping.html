@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="GENERATOR" content="UTF-8 Writer" />
 <title>薙刀式タイピングゲーム</title>
-<link rel="stylesheet" href="css/text.css">
+<link rel="stylesheet" href="css/NaginataTyping.css">
 
 <script>
 
@@ -19,12 +19,15 @@ var hiragana = new Array("あ","い","う","え","お","か","き","く","け","
 var rnd = new Array();
 
 var Sentence = "";       //問題の文字列を格納
+var originSentence = "";
+var oneBeforeSentense="";
 var count=0;             //何問目か格納
 var missCount=0;
 var typStart,typEnd;   //開始時と終了時の時刻を格納
 var SentenceLength=0;
 var typeLetter ="";
 var keyStatus = new Array();
+var co=0;
 
 var SentenceArray = new Array("ある　ない　する　いない　あい　いる　なる　あな　いす　すいすい　なあ　なあなあ　なす　あるあるある　ないないない　するするする",
     "か　が　て　で　ず　が　ある　である　がない　でない　です　あるです　ないです　ずるい　するでない　すかすか　すてる　かす　かずかず　ずるずる　かてる　かてない　でる　でない",
@@ -36,16 +39,7 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
     "り　ひ　ち　りか　りく　なりたい　りんり　ちかい　たち　たちがわるい　ちく　ちき　ちしき　ちてき　ひる　ひらく　ひだり　ひれ　びれる　わるびれる　わるびれない　ひく　ひっぱる　ひきこもごも　ひかんてき　ひりひりすること　しょうちょう　きょうちょう　ちょうじょう　じょうちょう　ちょうきょう　ちょうちょうはっし　ちゅうしょう　ちょうしょう　ちゃくにん　ちゃくちゃく　ちゃんと　ちょっと　ちゃくしょく　ちゅうかい　ちゅうい　みょうちょう　りょうかい　りゅうい　しょうちょう　りょうしょう　りゃく　いかりゃく　りょしゅう　ひょうか　ひょうし　ひょうばん　しょうひょう　ひょうしょう　ひゅうが　ひゃくにん　ひゃっかい　ぴゃぴゅぴょ　はっぴゃくにん　ぴゅーま　こんぴゅーた　ぴゅーたりん　はっぴょう　しんぴょう　びょうき　びょうてき　びゃくや　ごびょう　なんびゃっかい",
     "ヴ　け　げ　ふ　ぶ　ぷ　ほ　ぼ　ぽ　いける　いけない　にげる　なげる　ほうほう　そのほうが　ぽっとで　ぷーるする　ぷくぷく　ぶくぶく　ぽくぽく　ぴくぴく　える　おぼえる　いれかえ　かえる　まえ　ぁぃぅぇぉ　てぃ　でぃ　とぅ　どぅ　てぃー　ぱーてぃー　てぃーぱーてぃー　でぃする　でぃれくたー　ているとぅーのーず　いんすとぅるめんと　あんどぅ　どぅわっぷ　ふぃくしょん　ふぃーるど　ふぉんと　ヴぃくとりー　ヴぉーぐ　ヴぃヴぁるでぃ　ヴぇーる　ヴゅー　ふぁいる　ふぁくと　ふぁくとりー　ふぁんたすてぃっく　ふぇち　ふぇすてぃばる　フェードアウト　ふぇいく　でゅーく　ふぉんでゅ　てぅりゃ");
 
-//0～25までの乱数をSentenceLength個作成して配列rndに格納する関数
-function random()
-{
-    for ( var i = 0 ; i < SentenceLength ; i++ )
-    {
-        rnd[i] = Math.floor( Math.random() * 40 );
-    }
-}
-
-function reaction(keyStatus){   
+function reaction(keyStatus){ //入力された文字の判定 
     if(keyStatus[32]){//シフト同時押し
         if(keyStatus[70]){//シフトと左手濁音キー(f)押し
             if(keyStatus[81]) return "ヴ";//q
@@ -417,44 +411,50 @@ function SetSentence()
 {
     //問題文とカウント数をクリアする
     count=0;
-    //乱数作成関数の呼び出し
-    random();
-    
-    //問題文の作成
-    // for ( var i = 0 ; i < SentenceLength ; i++)
-    // {
-    //     Sentence += hiragana[ rnd[i] ];
-    // }
+    Sentence=SentenceArray[0];
+    SentenceLength=Sentence.length;
+    originSentence=Sentence;
     //問題枠に表示する
     document.getElementById("waku").style.backgroundColor="aliceblue";
-    document.getElementById("waku").innerHTML = Sentence;
+    document.getElementById("waku").innerHTML = originSentence;
+}
+
+function sleep(waitMsec) {
+  var startMsec = new Date();
+ 
+  // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
+  while (new Date() - startMsec < waitMsec);
 }
 
 function keydownFunction(e)
 {
-    //入力されたキーのキーコードを取得   
-    keyStatus[e.keyCode]=true;
-
-    typeLetter = reaction(keyStatus);
+    //入力されたキーのキーコードを取得
+    if(e.keyCode>30){   
+        keyStatus[e.keyCode]=true;
+        typeLetter = reaction(keyStatus);
+    }
     return false;
 }
+
 function releaseFunction(e){
- 
     if(typeLetter==Sentence.charAt(0)||typeLetter==Sentence.slice(0,2)){
         if (count==0)
         { 
             typStart = new Date();
         }
         count++;
+
         document.getElementById("waku").style.backgroundColor="aliceblue";
         if (count < SentenceLength)
         {
             //問題文の頭の一文字を切り取る
             if(typeLetter==Sentence.slice(0,2)){
+                sliceSentence=Sentence.substring(0,2);
                 Sentence = Sentence.slice(2);
                 count++;
             }
             else{
+                sliceSentence=Sentence.substring(0,1);
                 Sentence = Sentence.slice(1);
             }
             
@@ -462,9 +462,11 @@ function releaseFunction(e){
                 Sentence = Sentence.slice(1);
                 count++;
             }
-
             //問題枠に表示する
             document.getElementById("pushKey").innerText="入力された文字：" + typeLetter;
+            document.getElementById("waku").style.backgroundColor="palegreen";
+            var aliceblue=function(){document.getElementById("waku").style.backgroundColor="aliceblue"}
+            setTimeout(aliceblue,200);
             document.getElementById("waku").innerHTML = Sentence;
         }    
         else
@@ -484,7 +486,7 @@ function releaseFunction(e){
         var ansper=count/(count+missCount)*100;
         ansper=Math.round(ansper);
         //問題終了を告げる文字列を作成
-        var fin="GAME終了　時間："+sec+"秒"+msec+"\n";//+"正確度："+count+"/"+(count+missCount)+"="+ansper+"%";
+        var fin="GAME終了　時間："+sec+"秒"+msec+"\n";
         
         //問題枠にゲーム終了を表示
         document.getElementById("waku").innerHTML = fin;
@@ -492,16 +494,17 @@ function releaseFunction(e){
     }
     else{
         if(typeLetter!=undefined){
-            document.getElementById("pushKey").innerText="入力された文字：" + typeLetter;
-            document.getElementById("waku").style.backgroundColor="lightcoral";
+            document.getElementById("pushKey").innerText="入力された文字：" + typeLetter;  
         }
         else document.getElementById("pushKey").innerText="入力された文字："
     } 
     keyStatus.map(function(value, index, array){
         return array[index]=false;
-    });      
+    });
+    co++;
     return false;
 }
+
 function OneSlice(){
     Sentence = Sentence.slice(1);
     if(Sentence.charAt(0)=="　"){
@@ -542,6 +545,7 @@ function changeSentence(){
     break;
   }
   SentenceLength=Sentence.length;
+  originSentence=Sentence;
   SetSentence();
 }
 
