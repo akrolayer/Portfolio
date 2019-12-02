@@ -231,17 +231,17 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
             if(keyStatus[80]) return "べ";//p
             if(keyStatus[72]) return "ぐ";//h
             if(keyStatus[78]) return "だ";//n
-            return "　";//f
+            return "か";//f
         }
         if(keyStatus[86]){//左手半濁音キー(v)押し
             if(keyStatus[80]) return "ぺ";//p
-            return "　";//v
+            return "こ";//v
         }
         if(keyStatus[77]){//右手半濁音キー(m)押し
             if(keyStatus[83]) return "ぽ";//z
             if(keyStatus[88]) return "ぴ";//x
             if(keyStatus[67]) return "ぱ";//c
-            return "　";//m
+            return "な";//m
         }
         //単押し
         if(keyStatus[81]) {
@@ -310,7 +310,6 @@ function releaseFunction(e){
             typStart = new Date();
         }
         count++;
-
         document.getElementById("waku").style.backgroundColor="aliceblue";
         if (count < SentenceLength)
         {
@@ -334,6 +333,7 @@ function releaseFunction(e){
             document.getElementById("waku").style.backgroundColor="palegreen";
             var aliceblue=function(){document.getElementById("waku").style.backgroundColor="aliceblue"}
             setTimeout(aliceblue,200);
+            document.getElementById("waku").innerHTML = Sentence;
         }    
         else
         {
