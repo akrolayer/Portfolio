@@ -42,11 +42,16 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
             if(keyStatus[85]) return "ざ";//u
             if(keyStatus[76]) return "づ";//l
             if(keyStatus[190]) return "ぶ";//.
-            return "";//f
+            return "ま";//f
         }
         if(keyStatus[74]){//シフトと右手濁音キー(j)押し
             if(keyStatus[81]) return "ヴ";//q
-            if(keyStatus[87]) return "む";//w
+            if(keyStatus[87]) {
+                if(keyStatus[186]) return "ぎゃ";
+                if(keyStatus[80]) return "ぎゅ";
+                if(keyStatus[73]) return "ぎょ";
+                return "む";//w
+            }
             if(keyStatus[69]) return "り";//e
             if(keyStatus[82]) {
                 if(keyStatus[186]) return "じゃ";
@@ -55,14 +60,8 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
                 if(keyStatus[73]) return "じょ";
                 return "め";//r
             }
-            if(keyStatus[85]) return "さ";//u
-            if(keyStatus[73]) return "よ";//i
-            if(keyStatus[79]) return "え";//o
-            if(keyStatus[80]) return "ゆ";//p
             if(keyStatus[65]) return "ぜ";//a
-            if(keyStatus[83]) return "み";//s
-            if(keyStatus[68]) return "に";//d
-            if(keyStatus[70]) return "ま";//f
+
             if(keyStatus[71]) {
                 if(keyStatus[186]) return "ぢゃ";
                 if(keyStatus[79]) return "ぢぇ";
@@ -71,9 +70,6 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
                 return "ぢ";//g
             }
             if(keyStatus[72]) return "ゎ";//h 
-            if(keyStatus[75]) return "も";//k
-            if(keyStatus[76]) return "つ";//l
-            if(keyStatus[186]) return "や";//;
             if(keyStatus[90]) return "げ";//z
             if(keyStatus[88]) {
                 if(keyStatus[186]) return "びゃ";
@@ -81,19 +77,29 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
                 if(keyStatus[73]) return "びょ";
                 return "び";//x
             }
-            if(keyStatus[67]) return "を";//c
             if(keyStatus[86]) return "ぁ";//v
-            if(keyStatus[66]) return "ね";//b
-            if(keyStatus[78]) return "お";//n
-            if(keyStatus[77]) return "。";//m
-            if(keyStatus[188]) return "ぬ";//,
-            if(keyStatus[190]) return "ふ";//.
-            if(keyStatus[191]) return "れ";///
             return "の";//j
         }
-        if(keyStatus[86]){//シフトと左手半濁音キー(v)押し//右手は存在しない
+        if(keyStatus[86]){//シフトと左手半濁音キー(v)押し
             if(keyStatus[190]) return "ぷ";//.
-            return "　";//v
+            if(keyStatus[73]) return "ょ";//i
+            if(keyStatus[79]) return "ゅ";//o
+            if(keyStatus[80]) return "ぇ";//p
+            if(keyStatus[72]) return "ゎ";//h
+            if(keyStatus[74]) return "ぁ";//j
+            if(keyStatus[75]) return "ぃ";//k
+            if(keyStatus[76]) return "ぅ";//l
+            if(keyStatus[186]) return "ゃ";//;
+            if(keyStatus[78]) return "ぉ";//n
+            return "、";//v
+        }
+        if(keyStatus[77]){//シフトと右手半濁音キー(m)押し
+            if(keyStatus[88]){//x
+                if(keyStatus[186]) return "ぴゃ";
+                if(keyStatus[80]) return "ぴゅ";
+                if(keyStatus[73]) return "ぴょ";
+            }
+        return "";
         }
         //清音
         if(keyStatus[81]) {
@@ -159,7 +165,7 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
         if(keyStatus[90]) return "け";//z
         if(keyStatus[88]) {
             if(keyStatus[186]) return "ひゃ";
-            if(keyStatus[79]) return "ひゅ";
+            if(keyStatus[80]) return "ひゅ";
             if(keyStatus[73]) return "ひょ";
             return "ひ";//x
         }
@@ -187,9 +193,6 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
         if(keyStatus[74]){//右手濁音キー(j)押し
             if(keyStatus[81]) return "ヴ";//q
             if(keyStatus[87]) {
-                if(keyStatus[186]) return "ぎゃ";
-                if(keyStatus[80]) return "ぎゅ";
-                if(keyStatus[73]) return "ぎょ";
                 return "ぎ";//w
             }
             if(keyStatus[69]) {
@@ -255,6 +258,7 @@ var SentenceArray = new Array("ある　ない　する　いない　あい　�
             return "て";//e
         }
         if(keyStatus[82]) return "し";//r
+        if(keyStatus[85]) return "BS";//u
         if(keyStatus[73]) return "る";//i
         if(keyStatus[79]) return "す";//o
         if(keyStatus[80]) return "へ";//p
@@ -329,7 +333,7 @@ function releaseFunction(e){
                 count++;
             }
             //問題枠に表示する
-            document.getElementById("pushKey").innerText="入力された文字：" + typeLetter;
+            document.getElementById("pushKey").innerText="入力された文字：" + "[" + typeLetter + "]";
             document.getElementById("waku").style.backgroundColor="palegreen";
             var aliceblue=function(){document.getElementById("waku").style.backgroundColor="aliceblue"}
             setTimeout(aliceblue,200);
