@@ -23,56 +23,90 @@
 <h1 id="logo"><a href="index.html"><img src="images/logo.png" alt="ごまなつ"></a></h1>
 <nav id="menubar">
 <ul>
-<li><a href="#Profile">Profile</a></li>
-<li><a href="service.html">SERVICE</a></li>
-<li><a href="recruit.html">RECRUIT</a></li>
-<li><a href="link.html">LINK</a></li>
+	<li><a href="#Introduction">Introduction</a></li>
+	<li><a href="#Biography">略歴</a></li>
+	<li><a href="#Product">制作物</a></li>
+	<li><a href="#hobby">趣味</a></li>
+	<li><a href="#Link">リンク</a></li>
 </ul>
 </nav>
+<ul class="icon">
+	<li><a href="https://twitter.com/akrolayer"><img src="images/Twitter_Social_Icon_Rounded_Square_Color.png" alt="Twitter"></a></li>
+	<li><a href="https://github.com/akrolayer"><img src="images/GitHub-Mark-32px.png" alt= "Github"></a></li>
+</ul>
 </header>
 
 <div id="mainimg">
-<img src="images/img01.png" alt="TopImage" class="TopImage">
+	<img src="images/img01.png" alt="TopImage" class="TopImage">
 </div>
 
 <div id="contents">
+	<section id="Introduction">
+		<h2>Introduction</h2>
+		ごまなつと申します。大学では組込みシステムにおける応答時間の遅延を一定以内に抑える研究を行い、大学院でも継続しました。また、県警から委託されたサイバー防犯ボランティアで講演活動を行っていました。
+		<br>
+		現職では、C#と.NETでのWindowsアプリケーション開発と自社製品の検証を行っています。開発では分からないコードは実際に処理を追って理解し、書くコードは分かりやすくなるように心がけています。検証では、実施事項が理解できる簡潔な書類作成を心がけています。
+		<br>
+		勉強会に参加し、情報収集をしています。技術的事柄ではないですが、登壇経験があります。最近では、アウトプットとしてキー入力カスタマイズの技術同人誌を書きました。
+		<br>
 
-<section id="Profile"></section>
-<h2>Profile</h2>
-ごまなつと申します。社会人2年目、業務ではC#と.NETでWindowsアプリ開発をしております。アウトプットを心がけており、技術的な内容はまだですが登壇経験があります。
-</section>
+	</section>
 
-<section>
+	<section id="Biography">
+		<h2>Biography</h2>
+		<h3>現職, 2018-</h3>
+		情報通信機器メーカにて、C#と.NETでのWindowsアプリケーション開発と自社製品の検証を行う
+		<h3>大学院, 2016-2018</h3>
+		広島市立大学大学院　情報科学研究科にて、組込みシステムにおける応答時間の遅延を一定以内に抑える研究を行う
+		<br>
+		ESSロボットチャレンジに参加
+		<br>
+		サイバー防犯ボランティアで講演活動を行う
+		<br>
+		高等学校にて、非常勤講師（情報科）として勤務
+		<h3>大学, 2012-2016</h3>
+		広島市立大学　情報科学科にて、新規研究として組込みシステムにおける応答時間の遅延を一定以内に抑える研究を行う
+	</section>
 
-<h2>テンプレートのご利用前に必ずお読み下さい</h2>
+	<section id="Product">
+		<h2>Product</h2>
+		<h3>技術同人誌</h3>
+		2冊頒布しております。
+		<div class="list">
+			<img src="images/Gamecenter_Surface.png">
+			<h4>ゲームセンターを楽しむ技術</h4>
+			<p>ゲームセンターに初めて行く人のための解説、ゲームセンターに普段から行っている人もよりゲームセンターを楽しめるようになる本。複数の著者が、自分がよくプレーするゲームの紹介と楽しみ方を解説。基盤集めだってゲーセンに入るよね？お勧めのゲームセンターや、初めての人におすすめのゲームも載ってます。</p>
+		</div>
+		<div class="list">
+			<img src="images/Keybind_Surface.jpg">
+			<h4>AutoHotKey・Karabiner-Elementsではじめるキーバインド設定</h4>
+			<p>
+				<li>小指を伸ばさないと押せない：Escキー、Enterキー、BackSpaceキー、IMEキー</li>
+				<li>ホームポジションから手が離れる：Deleteキー、PageUpキー、PageDownキー、カーソルキー</li>
+				これに不満を感じた筆者がキーバインド設定でカーソルキーやマウス操作、遠いキーをホームポジションから手を離さずに入力できるようにした本。Windows・Mac両対応（Windows：AutoHotKey、Mac：Karabiner-Elements）。
+			</p>
+		</div>
+		<h3>タイピングゲーム</h3>
+		QWERTY配列以外の配列に挑戦するときに設定を変更するのが面倒だと思われるため、Webサイト上でQWERTY配列のまま入力すると他の配列で入力されるタイピングゲームを作りました。
+		<br>
+		<a href="typing.html">英語・ローマ字配列</a>
+		<br>
+		<a href="NaginataTyping.html">薙刀式（かな入力）</a>
+	</section>
+	<section id="hobby">
+		<h2>趣味</h2>
+		<b>ボードゲーム、カードゲーム、自作キーボード、キーバインド設定、PCゲーム、e-sports観戦、音楽ゲーム（DDR）</b>
+		<br>
+		趣味の共通点を考えると、今持っている手札で戦略を立てるゲームが好きなようです。自分が立てた目標に向かって何をすべきか考えて、それを実行した結果が分かって行動を変更するということもあるようです。最適化やオリジナリティを求める傾向もありそうです。
+	</section>
+	<section id="Link">
+		<h2>Link</h2>
+		<li><a href="https://speakerdeck.com/akrolayer">Speakerdeck</a></li>
+		<li><a href="https://gomana2.hatenablog.jp/">はてなブログ</a></li>
+		<li><a href="Qiita:https://qiita.com/akrolayer">Qiita</a></li>
+	</section>
 
-<h3>利用規約のご案内</h3>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-</section>
-<h2 id="idmei">jump</h2>
+	<section></section>
 </div>
 <!--/contents-->
 

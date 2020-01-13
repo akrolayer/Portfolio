@@ -40,8 +40,7 @@ a:hover {
 /*コンテナー（ホームページを囲む一番外側のブロック）
 ---------------------------------------------------------------------------*/
 #container {
-	width: 80%;			/*ブロックの幅を画面の80%にする設定。*/
-	max-width: 1000px;	/*上のwidth指定の追加設定。幅1000pxを最大幅に設定し、それ以上広げない。*/
+	width: 100%;			/*ブロックの幅を画面の80%にする設定。*/
 	margin: 0 auto;		/*HP画面の左右中央に表示させる設定*/
 }
 
@@ -51,10 +50,12 @@ a:hover {
 header {
 	text-align: center;		/*headerの中身をセンタリングさせる設定*/
 	height: 150px;			/*headerの高さ*/
-	<!-- background: #7117c4;-->	/*headerの背景色*/
+	background: #7117c4;	/*headerの背景色*/
 	position: -webkit-sticky;
 	position: sticky;
-	top: 10px;
+	top: 0px;
+	left: 0px;
+	width: 100%; 
 	z-index: 10;
 }
 /*ロゴ画像設定*/
@@ -72,6 +73,24 @@ header {
 	position: relative;
 	margin-bottom: 40px;
 
+}
+/*headerアイコン（facebookやtwitterなどのアイコンブロック）
+---------------------------------------------------------------------------*/
+/*アイコンを囲むブロック全体の設定*/
+header .icon {
+	position: absolute;
+	right: 15%;		/*ヘッダーブロックに対して右から3%の場所に配置*/
+	bottom: 15px;	/*ヘッダーブロックに対して下から15pxの場所に配置*/
+	background-color: white;
+}
+/*アイコン１個あたりの設定*/
+header .icon li {
+	display: inline;	/*横並びにさせる指定*/
+}
+/*アイコン画像の設定*/
+header .icon img {
+	width: 30px;		/*画像の幅*/
+	margin-left: 5px;	/*画像同士の余白*/
 }
 
 /*メニュー
@@ -99,11 +118,14 @@ header {
 #contents {
 	background: #fff;	/*背景色*/
 	padding: 3%;		/*ボックス内の余白*/
+	margin: 0 auto;
+	width: 60%;
 }
 /*コンテンツのh2タグの設定*/
 #contents h2 {
 	clear: both;
 	margin-bottom: 15px;
+	margin-top: 15px;
 	color: #fff;		/*文字色*/
 	padding: 5px 20px;	/*上下、左右への余白*/
 	background: #7117c4;	/*背景色*/
@@ -112,6 +134,7 @@ header {
 #contents h3 {
 	clear: both;
 	margin-bottom: 15px;
+	margin-top: 15px;
 	padding: 3px 20px;	/*上下、左右への余白*/
 	border: 1px solid #ccc;	/*枠線の幅、線種、色*/
 }
