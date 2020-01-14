@@ -19,7 +19,7 @@ body {
 	background: linear-gradient(#7117c4 150px, #fff 150px);	/*トップページ以外の背景設定。画面の上から150pxまでが#7117c4で、そこからすぐ#fffの白色に切り替える内容。*/
 }
 body#top {
-	background: linear-gradient(#7117c4 450px, #fff 450px);	/*トップページの背景設定。画面の上から450pxまでが#7117c4で、そこからすぐ#fffの白色に切り替える内容。*/
+	background: linear-gradient(#7117c4 450px, #fff 650px);	/*トップページの背景設定。画面の上から450pxまでが#7117c4で、そこからすぐ#fffの白色に切り替える内容。*/
 }
 h1,h2,h3,h4,h5,p,ul,ol,li,dl,dt,dd,form,figure,form {margin: 0px;padding: 0px;font-size: 100%;}
 ul {list-style-type: none;}
@@ -40,7 +40,6 @@ a:hover {
 /*コンテナー（ホームページを囲む一番外側のブロック）
 ---------------------------------------------------------------------------*/
 #container {
-	width: 100%;			/*ブロックの幅を画面の80%にする設定。*/
 	margin: 0 auto;		/*HP画面の左右中央に表示させる設定*/
 }
 
@@ -49,7 +48,7 @@ a:hover {
 /*headerブロック*/
 header {
 	text-align: center;		/*headerの中身をセンタリングさせる設定*/
-	height: 150px;			/*headerの高さ*/
+	height: 120px;			/*headerの高さ*/
 	background: #7117c4;	/*headerの背景色*/
 	position: -webkit-sticky;
 	position: sticky;
@@ -62,7 +61,7 @@ header {
 #logo  img {
 	width: 500px;			/*画像幅*/
 	margin-top: 30px;		/*画像の上に空けるスペース*/
-	margin-bottom: 20px;	/*画像の下に空けるスペース*/
+	margin-bottom: 15px;	/*画像の下に空けるスペース*/
 }
 /*top画像設定*/
 #mainimg {
@@ -73,6 +72,9 @@ header {
 	position: relative;
 	margin-bottom: 40px;
 
+}
+html {
+	scroll-padding-top: 130px; /* 固定ヘッダの高さ分 */
 }
 /*headerアイコン（facebookやtwitterなどのアイコンブロック）
 ---------------------------------------------------------------------------*/
@@ -105,7 +107,7 @@ header .icon img {
 }
 #menubar li a {
 	text-decoration: none;
-	padding: 15px 30px;	/*各メニュー内の余白。上下に15px、左右に30pxあけるという意味。*/
+	padding: 10px 30px;	/*各メニュー内の余白。上下に15px、左右に30pxあけるという意味。*/
 	color: #fff;	/*文字色*/
 }
 /*マウスオン時の設定*/
