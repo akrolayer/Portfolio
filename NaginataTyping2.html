@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="css/NaginataTyping.css">
 
 <script>
-
 document.onkeydown = keydownFunction;  //キー押下時に関数keydownFunction()を呼び出す
 document.onkeyup = releaseFunction;
 
@@ -396,37 +395,40 @@ function changeSentence(){
 </style>
 
 </head>
-<body onload="changeSentence();" bgcolor="#ffffff" text="#000000" >
+<div id="contents">
+    <body onload="changeSentence();" bgcolor="#ffffff" text="#000000" >
 
-<h1>薙刀式v11.3タイピング</h1>
-<p>下のプルダウンメニューからLessonを選択してください</p>
-<select name="name" id="name">
-    <option value="Lesson1">右手心臓部１</option>
-    <option value="Lesson2">左手心臓部１</option>
-    <option value="Lesson3">両手心臓部２</option>
-    <option value="Lesson4">センターシフト</option>
-    <option value="Lesson5">短文</option>
-    <option value="Lesson6">半濁音、小書き</option>
-    <option value="Lesson7">拗音</option>
-    <option value="Lesson8">拗音２、外来音</option>
-    <option value="Lesson9">その他</option>
-    <option value="Lesson10">マイナー音（ふ）</option>
-    <option value="Lesson11">マイナー音（ほ）</option>
-    <option value="Lesson12">マイナー音（せ）</option>
-    <option value="Lesson13">マイナー音（へ）</option>
-    <option value="Lesson14">マイナー音（ヴ）</option>
-    <option value="Lesson15">半濁音練習</option>
-    <option value="Lesson16">人差し指内側キー濁音</option>
-    <option value="Lesson17">左手マイナーキー</option>
-  </select>
-  <input type="button" value="Lesson切替" onclick="changeSentence()" />
+    <h1>薙刀式v11.3タイピング</h1>
+    <p>下のプルダウンメニューからLessonを選択してください</p>
+    <select name="name" id="name">
+        <option value="Lesson1">右手心臓部１</option>
+        <option value="Lesson2">左手心臓部１</option>
+        <option value="Lesson3">両手心臓部２</option>
+        <option value="Lesson4">センターシフト</option>
+        <option value="Lesson5">短文</option>
+        <option value="Lesson6">半濁音、小書き</option>
+        <option value="Lesson7">拗音</option>
+        <option value="Lesson8">拗音２、外来音</option>
+        <option value="Lesson9">その他</option>
+        <option value="Lesson10">マイナー音（ふ）</option>
+        <option value="Lesson11">マイナー音（ほ）</option>
+        <option value="Lesson12">マイナー音（せ）</option>
+        <option value="Lesson13">マイナー音（へ）</option>
+        <option value="Lesson14">マイナー音（ヴ）</option>
+        <option value="Lesson15">半濁音練習</option>
+        <option value="Lesson16">人差し指内側キー濁音</option>
+        <option value="Lesson17">左手マイナーキー</option>
+    </select>
+    <input type="button" value="Lesson切替" onclick="changeSentence()" />
 
-<div id="pushKey">入力された文字：</div>
-<div id="waku"></div>
-<input type="button" value="問題初期化" onclick="SetSentence()">
-<input type="button" value="1つ進める" onclick="OneSlice()"><br>
-<p>配列図</p>
-<img id="image" src="images/naginata11.3.jpg" alt="薙刀式配列図" width="40%" height="50%">
-</body>
+    <div id="pushKey">入力された文字：</div>
+    <div id="waku"></div>
+    <input type="button" value="問題初期化" onclick="SetSentence()">
+    <input type="button" value="1つ進める" onclick="OneSlice()">
+    <br>
+    <br>
+    <img id="image" src="images/naginata11.3.jpg" alt="薙刀式配列図" width="85%" height="45%">
+    </body>
+</div>
 </html>
 

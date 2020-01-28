@@ -1,5 +1,6 @@
 body{
-    background-color: #66CCCC
+    background-color: #66CCCC;
+    margin: 0 auto;		/*HP画面の左右中央に表示させる設定*/
     }
 div#waku
   {
@@ -9,4 +10,10 @@ div#waku
   font-size:18pt;
   overflow:auto;
   background-color: aliceblue;
+  }
+  #contents {
+    background: #66CCCC;	/*背景色*/
+    padding: 0.5%;		/*ボックス内の余白*/
+    margin: 0 auto;
+    width: 40%;
   }
