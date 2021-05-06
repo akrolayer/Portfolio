@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC>
+<html lang="ja">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="GENERATOR" content="UTF-8 Writer" />
+<title>薙刀式タイピングゲーム</title>
+<link rel="stylesheet" href="css/NaginataTyping.css">
+
+<script>
+document.onkeydown = keydownFunction;  //キー押下時に関数keydownFunction()を呼び出す
+document.onkeyup = releaseFunction;
+
+var originSentence = "";
+var count=0;             //何問目か格納
+var typStart,typEnd;   //開始時と終了時の時刻を格納
+var SentenceLength=0;
+var typeLetter ="";
+var keyStatus = new Array();
+
+var SentenceArray = new Array("ある　ない　する　いない　あい　いる　なる　あな　いす　すいすい　なあ　なあなあ　なす　あるあるある　ないないない　するするする",
+    "か　が　て　で　ず　が　ある　である　がない　でない　です　あるです　ないです　ずるい　するでない　すかすか　すてる　かす　かずかず　ずるずる　かてる　かてない　でる　でない",
+    "こ　と　し　ご　ど　じ　た　だ　う　ん　こと　して　してる　している　してある　してない　していない　すること　した　したこと　したことがある　したことがない　することがない　することがある　いう　うん　いうんだ　なんだ　なんだい　こういうこと　こういうことがある　こういうことがない　こうである　こうでない　しかない　しがない　こんなことがある　こんなことがない　こうだ　してた　うんだ　するんだ　しんだ　とんだ　したがう　したがうんだ　かかない　かかないことがある　どうする　どうだ　だんだん",
+    "ま　に　まに　も　の　もの　まにあう　ます　まにあいます　ますます　まずまず　まずない　まずい　うまい　ここにある　ここにない　れ　これ　それ　どれ　あれ　お　も　の　おもう　もう　もの　のだ　なのだ　そうなのだ　まもの　にもの　おおもの　ものがある　それがどうした　あれがこうなのだ　そうだとおもう　だがそうでない　それにこうだ　どれにする　なにもない　これにそれもない　ああいうがそうだなとおもう　そのことがこうなるなんて　あのことがそうなるなんて　などなど　になる　おとこ　おんな",
+    "って　っと　った　あった　だった　とった　いった　かった　そっと　わくわくする　わたしがいう　そく　くそ　わたし　あなた　あなたとわたし　しくじる　すくすく　くわしい　それは　それはどうかな　わたしはばかだ　はっしたこと　ばっしたこと　ばくだん　そのばのがれでいいのがれ　こういうとはおもわなかった　そうしてはどうか　こうすればいいのに　ら　したら　られた　られる　ならば　ならない　それから　そこからくる　だから　ですから　いうことがあるがそれがこれからしだいだ　していることがあるならいうことだな　そうだなそうしたら　あったまにくるなあ　では　には　とは　のは　られた　れば　られれば　ではどうか　そこにはあるかも　はじです　してはる　これなら、いくらでも　ああ。　こうしていこう。　そうなるか。　な、なにい。　していますが、なにか。",
+    "き　ぎ　み　を　よ　ゆ　ー　や　きかない　きく　きくとき　てきな　てきに　してき　きて　とき　ときどき　みない　みる　みるとき　よゆう　ゆうよ　あー　うー　とーく　しーと　にーと　きみ　きみがいない　きみがいる　それごとき　できる　できない　できないことがある　できることから　ようするに　ないようがあることとないこと　ぱ　ぱばは　はばぱ　ゃゅょ　ゎ　ぁぃぅぉ",
+    "しょ　じょ　しゃ　じゃ　しゅ　じゅ　　きょ　　ぎょ　きゃ　ぎゃ　きゅ　ぎゅ　しょう　じょう　しゅう　じゅう　きょう　ぎょう　きゅう　ぎゅう　しょーと　しゅーと　しゃーく　じょーく　じゅーく　きゅーと　ぎゃーぎゃー　しょうがない　しようがない　しゃしん　しゅくだい　きょう　きょうから　きょうからは　ししょう　じしょう　しょうし　しょうじ　しょうしょう　じょうじょう　しょうじょ　しょじょ　しょうじょう　じょうし　しじょう　しょし　じょし　しょじ　じしょ　しょうしょ　じょしょう　きょうし　しきょう　じきょう　きょうじ　ききょう　きょい　ぎきょう　しょうぎ　じょうき　ぎょうじ　じょうきょう　しょうぎょう　ぎょぎょう　ぎょしょう　しゃかい　じゃくてん　しゃく　じゃあく　きゃく　ぎゃく　ぎゃくに　しゅし　しゅうし　ししゅう　じゅうし　じゅし　しゅうじ　じゅうじ　しゅく　じゅく　しゅかん　しゅくん　しゅぎ　しゅき　きゅう　きゅうしゅう　きゅうじゅう　じゅうきゅう　じゅぎょう　ぎゅうじる　きゅうしょく　じゅうしょく　きゅうじ　きゅうし　にゅ　にょ　にゃ　ぎゅうにゅう　にょう　しゅうにゅう　にゅうぎょう　きょにゅう　にゅうしょう　にょしょう　でしょう　なるでしょう　あるでしょう　ないでしょう　みゃく　みょうな　みゃんまー",
+    "り　ひ　ち　りか　りく　なりたい　りんり　ちかい　たち　たちがわるい　ちく　ちき　ちしき　ちてき　ひる　ひらく　ひだり　ひれ　びれる　わるびれる　わるびれない　ひく　ひっぱる　ひきこもごも　ひかんてき　ひりひりすること　しょうちょう　きょうちょう　ちょうじょう　じょうちょう　ちょうきょう　ちょうちょうはっし　ちゅうしょう　ちょうしょう　ちゃくにん　ちゃくちゃく　ちゃんと　ちょっと　ちゃくしょく　ちゅうかい　ちゅうい　みょうちょう　りょうかい　りゅうい　しょうちょう　りょうしょう　りゃく　いかりゃく　りょしゅう　ひょうか　ひょうし　ひょうばん　しょうひょう　ひょうしょう　ひゅうが　ひゃくにん　ひゃっかい　ぴゃぴゅぴょ　はっぴゃくにん　ぴゅーま　こんぴゅーた　ぴゅーたりん　はっぴょう　しんぴょう　びょうき　びょうてき　びゃくや　ごびょう　なんびゃっかい",
+    "ヴ　け　げ　ふ　ぶ　ぷ　ほ　ぼ　ぽ　いける　いけない　にげる　なげる　ほうほう　そのほうが　ぽっとで　ぷーるする　ぷくぷく　ぶくぶく　ぽくぽく　ぴくぴく　える　おぼえる　いれかえ　かえる　まえ　ぁぃぅぇぉ　てぃ　でぃ　とぅ　どぅ　てぃー　ぱーてぃー　てぃーぱーてぃー　でぃする　でぃれくたー　ているとぅーのーず　いんすとぅるめんと　あんどぅ　どぅわっぷ　ふぃくしょん　ふぃーるど　ふぉんと　ヴぃくとりー　ヴぉーぐ　ヴぃヴぁるでぃ　ヴぇーる　ヴゅー　ふぁいる　ふぁくと　ふぁくとりー　ふぁんたすてぃっく　ふぇち　ふぇすてぃばる　ふぇーどあうと　ふぇいく　でゅーく　ふぉんでゅ　てぅりゃ",
+    "でぶになろう　ぶぶんてきなこと　ぷろ　ろてんぶろ　ひさしぶり　ぶーいんぐ　さぶうぇい　ぶさいく　ふうりんかざん　らんでぶー　ぷろれす　ぷろふぇっしょなる　はぷにんぐ　ぶらすばんど　ぶざーびーたー　ぷろぐらみんぐ　しょっぷ　ぷれっしゃー　ぶい　いっぷん　じゅうぶん　くりすますいぶ　ろーぷうぇい　らっぷ　こっぷ　とっぷ　ふしぎなこと　そんなふうに　ひもとっぷりくれて　ぷろふぃーる　ぶろっく　ふろっぐ　ふらっぐ",
+    "ほうほうろん　ぼうきょく　ぼうきゃく　ぽーず　しんぽうする　ほろびる　ほろぼす　ぼろぼろ　ぽろぽろ　ほーろーなべ　いっぽんとられた　ぽんざけ　にほんご　ぽーとれーと　すぽーつ　しっぽくうどん　ぼく　ぼったくり　ぼうそうぞく　ほぼこれで　ぼうず　ぼうさい　ぼうがい",
+    "せんとらる　せいぜい　ぜいきん　ぜいたく　ぜひぜひ　かせ　かぜ　せっかくの　ぜったい　じょせい　だんせい　こうごうせい　けいせい　せいけい　せけん　せっけん　けんせい　ぜいげん　せだいべつ　せーふ　ふうせん",
+    "べつに　べつべつ　つべるくりん　へや　やべえ　へいぼん　しへい　べっし　ぺいろーど　しっぺい　そうするべきだ　べきろん　へっている　そこへ　へいたい　べすとぽじしょん　すぺーすきー　へしゃげる　しべりあ　ぺんでぃんぐ　はんぺん　そうべつかい　べっかい　ぺんぺん　りべんせいをかんがえた　べんきょう　せんべい",
+    "ヴぃくとりー　ヴぃくとりあ　えんヴぃー　ヴぃーなす　へヴん　ヴぉるてーじ　ヴぇいろん　さばいヴ　くりすますいヴ　いヴぉんぬ　ヴヴヴとないた",
+    "すぴーど　すぽーつ　すぱ　すぺーす　すぷーん　ぷろでゅーす　ぷろだくと　ぷろぱてぃ　ぷるーん　ぷれい　ぷらん　ぴーぷる　しゅぷーる　すぱーく　ぷりんと　ぱーる　ぴーまん　ぽーる　ぱんぴー　ぱいなっぷる　ぷるぷる　ぱーてぃ　ぽーとぴあ　ぴーく",
+    "ぞくぞく　くそとぐそく　ぐだぐだ　だんぞくてきに　ぞんめい　そんぞく　そうだんごと　たそがれ　そうだぞ　そうぞう　ぐいぐい　きんぐくりむぞん　ぢぐじょう　かぞく　ぐんだん　かてばかんぐん　ぐらふぃっく　えんぐらふ　ぐっとくる　ぐっどです　せーふてぃぞーん",
+    "げだん　なにげない　さりげない　げいじゅつ　げんしょう　けいけん　けんげん　ねんりん　ねどこ　そうだね　するとね　だよね　そのけねんがある　みている　やってみて　はげしい　かれのけはいがする　きみのせなかにははねがある　ほうほうろん　げほげほ　ほねがある　むだぼね　けいほう　あさねぼう　なにをいってもけろっとしている　ひげ");
+
+    function reaction(keyStatus){ //入力された文字の判定 
+    if(keyStatus[32]){//シフト同時押し
+        if(keyStatus[70]){//シフトと左手濁音キー(f)押し
+            if(keyStatus[85]) return "ざ";//u
+            if(keyStatus[76]) return "づ";//l
+            if(keyStatus[190]) return "ぶ";//.
+            return "ま";//f
+        }
+        if(keyStatus[74]){//シフトと右手濁音キー(j)押し
+            if(keyStatus[81]) return "ヴ";//q
+            if(keyStatus[87]) {
+                if(keyStatus[187]) return "ぎゃ";
+                if(keyStatus[80]) return "ぎゅ";
+                if(keyStatus[73]) return "ぎょ";
+                return "む";//w
+            }
+            if(keyStatus[69]) {
+                if(keyStatus[80]) return "でゅ";
+                return "り";//e
+            }
+            if(keyStatus[82]) {
+                if(keyStatus[187]) return "じゃ";
+                if(keyStatus[79]) return "じぇ";
+                if(keyStatus[80]) return "じゅ";//p
+                if(keyStatus[73]) return "じょ";
+                return "め";//r
+            }
+            if(keyStatus[65]) return "ぜ";//a
+
+            if(keyStatus[71]) {
+                if(keyStatus[187]) return "ぢゃ";
+                if(keyStatus[79]) return "ぢぇ";
+                if(keyStatus[73]) return "ぢょ";
+                if(keyStatus[80]) return "ぢゅ";//p
+                return "ぢ";//g
+            }
+            if(keyStatus[72]) return "ゎ";//h 
+            if(keyStatus[90]) return "げ";//z
+            if(keyStatus[88]) {
+                if(keyStatus[187]) return "びゃ";
+                if(keyStatus[80]) return "びゅ";
+                if(keyStatus[73]) return "びょ";
+                return "び";//x
+            }
+            if(keyStatus[190]) return "ふぁ";
+            if(keyStatus[86]) return "ぁ";//v
+            return "の";//j
+        }
+        if(keyStatus[86]){//シフトと左手半濁音キー(v)押し
+            if(keyStatus[190]) return "ぷ";//.
+            if(keyStatus[73]) return "ょ";//i
+            if(keyStatus[79]) return "ぇ";//o
+            if(keyStatus[80]) return "ゅ";//p
+            if(keyStatus[72]) return "ゎ";//h
+            if(keyStatus[74]) return "ぁ";//j
+            if(keyStatus[75]) return "ぃ";//k
+            if(keyStatus[76]) return "ぅ";//l
+            if(keyStatus[187]) return "ゃ";//;
+            if(keyStatus[78]) return "ぉ";//n
+            return "、";//v
+        }
+        if(keyStatus[77]){//シフトと右手半濁音キー(m)押し
+            if(keyStatus[88]){//x
+                if(keyStatus[187]) return "ぴゃ";
+                if(keyStatus[80]) return "ぴゅ";
+                if(keyStatus[73]) return "ぴょ";
+            }
+        return "。";
+        }
+        //清音
+        if(keyStatus[190]) {
+            if(keyStatus[79]) return "ふぇ";
+            if(keyStatus[80]) return "ふゅ";
+            if(keyStatus[78]) return "ふぉ";
+            if(keyStatus[75]) return "ふぃ";
+            return "ふ";//.
+        }
+        if(keyStatus[81]) {
+            if(keyStatus[79]) return "ヴぇ";
+            if(keyStatus[78]) return "ヴぉ";
+            if(keyStatus[80]) return "ヴゅ";
+            return "ヴ";//q
+        }
+        if(keyStatus[87]) {
+            if(keyStatus[187]) return "きゃ";
+            if(keyStatus[80]) return "きゅ";
+            if(keyStatus[73]) return "きょ";
+            return "む";//w
+        }
+        if(keyStatus[69]) {
+            if(keyStatus[187]) return "りゃ";
+            if(keyStatus[80]) return "りゅ";
+            if(keyStatus[73]) return "りょ";
+            return "り";//e
+        }
+        if(keyStatus[82]) {
+            if(keyStatus[187]) return "しゃ";
+            if(keyStatus[79]) return "しぇ";
+            if(keyStatus[80]) return "しゅ";
+            if(keyStatus[73]) return "しょ";
+            return "め";//r
+        }
+        if(keyStatus[85]) return "さ";//u       
+        if(keyStatus[83]) {
+            if(keyStatus[187]) return "みゃ";
+            if(keyStatus[80]) return "みゅ";
+            if(keyStatus[73]) return "みょ";
+            return "み";//s
+        }
+        if(keyStatus[65]) return "せ";//a
+        if(keyStatus[68]) {
+            if(keyStatus[187]) return "にゃ";
+            if(keyStatus[80]) return "にゅ";
+            if(keyStatus[73]) return "にょ";
+            return "に";//d
+        }
+        if(keyStatus[70]) return "ま";//f
+        if(keyStatus[71]) {
+            if(keyStatus[187]) return "ちゃ";
+            if(keyStatus[80]) return "ちゅ";
+            if(keyStatus[79]) return "ちぇ"
+            if(keyStatus[73]) return "ちょ";
+            return "ち";//g
+        }
+        if(keyStatus[72]) return "わ";//h
+        if(keyStatus[74]) {
+            if(keyStatus[76]) return "つぁ";
+            if(keyStatus[75]) return "つぃ";
+            return "の";//j
+        }
+        if(keyStatus[75]) return "も";//k
+        if(keyStatus[76]) {
+            if(keyStatus[79]) return "うぇ";
+            if(keyStatus[78]) return "うぉ";
+            return "つ";//l
+        }
+        
+        if(keyStatus[90]) return "け";//z
+        if(keyStatus[88]) {
+            if(keyStatus[187]) return "ひゃ";
+            if(keyStatus[80]) return "ひゅ";
+            if(keyStatus[73]) return "ひょ";
+            return "ひ";//x
+        }
+        if(keyStatus[80]) return "ゆ";//p
+        if(keyStatus[67]) return "を";//c
+        if(keyStatus[86]) return "、";//v
+        if(keyStatus[66]) return "ね";//b
+        if(keyStatus[78]) return "お";//n
+        if(keyStatus[77]) return "。";//m
+        if(keyStatus[188]) return "ぬ";//,
+        if(keyStatus[191]) return "れ";///
+        if(keyStatus[187]) return "や";//;
+        if(keyStatus[79]) return "え";//o
+        if(keyStatus[73]) return "よ";//i
+    }
+    else{//シフトなし-----------------------------------------------------------------------
+        if(keyStatus[74]){//右手濁音キー(j)押し
+            if(keyStatus[81]) return "ヴぁ";//q
+            if(keyStatus[87]) {
+                return "ぎ";//w
+            }
+            if(keyStatus[69]) {
+                if(keyStatus[75]) return "でぃ";
+                return "で";//e
+            }
+            if(keyStatus[82]) return "じ";//r
+            if(keyStatus[73]) return "る";//i
+            if(keyStatus[79]) return "す";//o
+            if(keyStatus[80]) return "へ";//p
+            if(keyStatus[65]) return "ろ";//a
+            if(keyStatus[83]) {
+                return "ぼ";//s
+            }
+            if(keyStatus[68]) {
+                if(keyStatus[76]) return "どぅ";
+                return "ど";//d
+            }
+            if(keyStatus[70]) return "が";//f
+            if(keyStatus[71]) return "っ";//g
+            if(keyStatus[72]) return "く";//h
+            if(keyStatus[75]) return "い";//k
+            if(keyStatus[76]) return "う";//l
+            if(keyStatus[187]) return "ー";//;
+            if(keyStatus[90]) return "げ";//z
+            if(keyStatus[88]) return "び";//x
+            if(keyStatus[67]) return "ば";//c
+            if(keyStatus[86]) return "ご";//v
+            if(keyStatus[66]) return "ぞ";//b
+            if(keyStatus[78]) return "た";//n
+            if(keyStatus[77]) return "な";//m
+            if(keyStatus[188]) return "ん";//,
+            if(keyStatus[190]) return "ら";//.
+            if(keyStatus[191]) return "れ";///
+            return "あ";//j
+        }
+        if(keyStatus[70]){//左手濁音キー(f)押し
+            if(keyStatus[79]) return "ず";//o
+            if(keyStatus[80]) return "べ";//p
+            if(keyStatus[72]) return "ぐ";//h
+            if(keyStatus[78]) return "だ";//n
+            return "か";//f
+        }
+        if(keyStatus[86]){//左手半濁音キー(v)押し
+            if(keyStatus[80]) return "ぺ";//p
+            return "こ";//v
+        }
+        if(keyStatus[77]){//右手半濁音キー(m)押し
+            if(keyStatus[83]) return "ぽ";//z
+            if(keyStatus[88]) return "ぴ";//x
+            if(keyStatus[67]) return "ぱ";//c
+            return "な";//m
+        }
+        //単押し
+        if(keyStatus[81]) {
+            if(keyStatus[75]) return "ヴぃ"
+            return "ヴ";//q
+        }
+        if(keyStatus[87]) return "き";//w
+        if(keyStatus[69]) {
+            if(keyStatus[75]) return "てぃ";
+            if(keyStatus[76]) return "てぅ";//l
+            return "て";//e
+        }
+        if(keyStatus[82]) return "し";//r
+        if(keyStatus[85]) return "BS";//u
+        if(keyStatus[73]) return "る";//i
+        if(keyStatus[79]) return "す";//o
+        if(keyStatus[80]) return "へ";//p
+        if(keyStatus[65]) return "ろ";//a
+        if(keyStatus[83]) return "ほ";//s
+        if(keyStatus[68]) {
+            if(keyStatus[76]) return "とぅ"
+            return "と";//d
+        }
+        if(keyStatus[70]) return "か";//f
+        if(keyStatus[71]) return "っ";//g
+        if(keyStatus[72]) return "く";//h
+        if(keyStatus[74]) return "あ";//j
+        if(keyStatus[75]) return "い";//k
+        if(keyStatus[76]) return "う";//l
+        if(keyStatus[187]) return "ー";//;
+        if(keyStatus[90]) return "け";//z
+        if(keyStatus[88]) return "ひ";//x
+        if(keyStatus[67]) return "は";//c
+        if(keyStatus[86]) return "こ";//v
+        if(keyStatus[66]) return "そ";//b
+        if(keyStatus[78]) return "た";//n
+        if(keyStatus[77]) return "な";//m
+        if(keyStatus[188]) return "ん";//,
+        if(keyStatus[190]) return "ら";//.
+        if(keyStatus[191]) return "れ";///
+    }
+}
+//タイピングゲームの問題をセットする関数
+function SetSentence()
+{
+    //問題文とカウント数をクリアする
+    count=0;
+    //問題枠に表示する
+    document.getElementById("waku").style.backgroundColor="aliceblue";
+    document.getElementById("waku").innerHTML = originSentence;
+}
+
+function keydownFunction(e)
+{
+    //入力されたキーのキーコードを取得
+    if(e.keyCode>30){   
+        keyStatus[e.keyCode]=true;
+        typeLetter = reaction(keyStatus);
+    }
+    return false;
+}
+
+function releaseFunction(e){
+    if(typeLetter==Sentence.charAt(0)||typeLetter==Sentence.slice(0,2)){
+        if (count==0)
+        { 
+            typStart = new Date();
+        }
+        count++;
+        document.getElementById("waku").style.backgroundColor="aliceblue";
+        if (count < SentenceLength)
+        {
+            //問題文の頭の一文字を切り取る
+            if(typeLetter==Sentence.slice(0,2)){
+                sliceSentence=Sentence.substring(0,2);
+                Sentence = Sentence.slice(2);
+                count++;
+            }
+            else{
+                sliceSentence=Sentence.substring(0,1);
+                Sentence = Sentence.slice(1);
+            }
+            
+            if(Sentence.charAt(0)=="　"){
+                Sentence = Sentence.slice(1);
+                count++;
+            }
+            //問題枠に表示する
+            document.getElementById("pushKey").innerText="入力された文字：" + "[" + typeLetter + "]";
+            document.getElementById("waku").style.backgroundColor="palegreen";
+            var aliceblue=function(){document.getElementById("waku").style.backgroundColor="aliceblue"}
+            setTimeout(aliceblue,200);
+            document.getElementById("waku").innerHTML = Sentence;
+        }    
+        else
+        {
+        //全文字入力していたら、終了時間を記録する
+        typEnd = new Date();
+        
+        //終了時間－開始時間で掛かったミリ秒を取得する
+        var elapsed = typEnd - typStart;
+        
+        //1000で割って「切捨て」、秒数を取得
+        var sec = Math.floor( elapsed/1000 );
+        
+        //1000で割った「余り(%で取得できる）」でミリ秒を取得
+        var msec = elapsed % 1000;
+        
+        //問題終了を告げる文字列を作成
+        var fin="GAME終了　時間："+sec+"秒"+msec+"\n";
+        
+        //問題枠にゲーム終了を表示
+        document.getElementById("waku").innerHTML = fin;
+        }
+    }
+    else{
+        if(typeLetter!=undefined){
+            document.getElementById("pushKey").innerText="入力された文字：" +  "[" + typeLetter + "]" ;  
+        }
+        else document.getElementById("pushKey").innerText="入力された文字：[　]"
+    } 
+    keyStatus.map(function(value, index, array){
+        return array[index]=false;
+    });
+    return false;
+}
+
+function OneSlice(){
+    Sentence = Sentence.slice(1);
+    if(Sentence.charAt(0)=="　"){
+                Sentence = Sentence.slice(1);
+    }
+    document.getElementById("waku").innerHTML = Sentence;
+}
+
+function changeSentence(){
+    target= document.getElementById("name");
+    Sentence=SentenceArray[target.selectedIndex];
+    SentenceLength=Sentence.length;
+    originSentence=Sentence;
+    SetSentence();
+}
+
+</script>
+
+</style>
+
+</head>
+<div id="contents">
+    <body onload="changeSentence();" bgcolor="#ffffff" text="#000000" >
+
+    <h1>薙刀式v11.3タイピング</h1>
+    <p>下のプルダウンメニューからLessonを選択してください</p>
+    <select name="name" id="name">
+        <option value="Lesson1">右手心臓部１</option>
+        <option value="Lesson2">左手心臓部１</option>
+        <option value="Lesson3">両手心臓部２</option>
+        <option value="Lesson4">センターシフト</option>
+        <option value="Lesson5">短文</option>
+        <option value="Lesson6">半濁音、小書き</option>
+        <option value="Lesson7">拗音</option>
+        <option value="Lesson8">拗音２、外来音</option>
+        <option value="Lesson9">その他</option>
+        <option value="Lesson10">マイナー音（ふ）</option>
+        <option value="Lesson11">マイナー音（ほ）</option>
+        <option value="Lesson12">マイナー音（せ）</option>
+        <option value="Lesson13">マイナー音（へ）</option>
+        <option value="Lesson14">マイナー音（ヴ）</option>
+        <option value="Lesson15">半濁音練習</option>
+        <option value="Lesson16">人差し指内側キー濁音</option>
+        <option value="Lesson17">左手マイナーキー</option>
+    </select>
+    <input type="button" value="Lesson切替" onclick="changeSentence()" />
+
+    <div id="pushKey">入力された文字：</div>
+    <div id="waku"></div>
+    <input type="button" value="問題初期化" onclick="SetSentence()">
+    <input type="button" value="1つ進める" onclick="OneSlice()">
+    <br>
+    <br>
+    <img id="image" src="images/naginata11.3.jpg" alt="薙刀式配列図" width="85%" height="45%">
+    </body>
+</div>
+</html>
+
